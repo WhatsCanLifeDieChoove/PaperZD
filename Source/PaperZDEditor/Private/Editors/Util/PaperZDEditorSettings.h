@@ -66,10 +66,6 @@ public:
 	/** Whether to display percentage in the anim timeline */
 	UPROPERTY(EditAnywhere, config, Category = "Timeline settings")
 	bool bTimelineDisplayPercentage;
-// 
-// 	/** Whether to display keys in the timeline's curve tracks */
-// 	UPROPERTY(EditAnywhere, config, Category = "Timeline settings")
-// 	bool bTimelineDisplayCurveKeys;
 
 	/** Whether to snap to various things */
 	UPROPERTY(EditAnywhere, config, Category = "Timeline settings")

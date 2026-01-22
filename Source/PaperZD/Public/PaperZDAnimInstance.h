@@ -152,6 +152,10 @@ public:
 	 UFUNCTION(BlueprintCallable, Category = "Playback")
 	 void ApplyAnimationSkinToLayer(UPaperZDAnimationSkin* Skin, int32 Layer = 0);
 
+	 /* Clears any skin from the given layer. */
+	 UFUNCTION(BlueprintCallable, Category = "Playback")
+	 void RemoveSkinsFromLayer(int32 Layer = 0);
+
 	/**
 	 * Event called when we update playback, changing to a new sequence. 
 	 * Only called for Animation Blueprints with "non-blendable" animation sources (like flipbooks), as these will only ever run one animation at a time.

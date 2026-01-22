@@ -51,6 +51,14 @@ void UPaperZDAnimInstance::ApplyAnimationSkinToLayer(UPaperZDAnimationSkin* Skin
 	}
 }
 
+void UPaperZDAnimInstance::RemoveSkinsFromLayer(int32 Layer /* = 0 */)
+{
+	if (AnimPlayer)
+	{
+		AnimPlayer->ApplyAnimationSkinToLayer(nullptr, Layer);
+	}
+}
+
 bool UPaperZDAnimInstance::AllowsTransitionalStates() const
 {
 	return bAllowTransitionalStates;
