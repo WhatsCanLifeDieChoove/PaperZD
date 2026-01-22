@@ -19,19 +19,20 @@
 #include "SPrimaryButton.h"
 #include "SSearchableComboBox.h"
 #include "TextureCompiler.h"
-
+#include "PropertyEditorModule.h"
 #include "AssetRegistry/AssetRegistryModule.h"
-
 #include "AnimSequences/PaperZDAnimSequence_Flipbook.h"
 #include "AnimSequences/Sources/PaperZDAnimationSource_Flipbook.h"
-
 #include "Kismet2/KismetEditorUtilities.h"
-
 #include "Util/PaperZDEditorSettings.h"
-
 #include "Widgets/Layout/SUniformGridPanel.h"
+#include "Widgets/Layout/SExpandableArea.h"
+#include "Widgets/Layout/SSeparator.h"
+#include "Widgets/Layout/SScrollBox.h"
+#include "Misc/FeedbackContext.h"
+#include "TextureResource.h"
 
-#define LOCTEXT_NAMESPACE "TiledIntegration"
+#define LOCTEXT_NAMESPACE "PaperZDTools"
 
 namespace SPaperZDExtractFlipbookFromTextureHelper
 {

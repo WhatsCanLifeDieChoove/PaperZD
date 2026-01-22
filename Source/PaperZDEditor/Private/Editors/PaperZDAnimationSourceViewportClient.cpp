@@ -9,6 +9,7 @@
 #include "Engine/CollisionProfile.h"
 #include "AudioDevice.h"
 #include "GameFramework/WorldSettings.h"
+#include "Runtime/Launch/Resources/Version.h"
 
 namespace FPaperZDViewportUtils
 {

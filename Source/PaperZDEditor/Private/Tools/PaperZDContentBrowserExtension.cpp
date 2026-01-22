@@ -4,8 +4,10 @@
 #include "ContentBrowserModule.h"
 #include "PaperZDEditorStyle.h"
 #include "PaperZDExtractFlipbookFromTextureDialog.h"
+#include "Engine/Texture2D.h"
+#include "Framework/MultiBox/MultiBoxBuilder.h"
 
-#define LOCTEXT_NAMESPACE "PaperZD"
+#define LOCTEXT_NAMESPACE "PaperZDTools"
 
 static FContentBrowserMenuExtender_SelectedAssets ContentBrowserExtenderDelegate;
 static FDelegateHandle ContentBrowserExtenderDelegateHandle;
