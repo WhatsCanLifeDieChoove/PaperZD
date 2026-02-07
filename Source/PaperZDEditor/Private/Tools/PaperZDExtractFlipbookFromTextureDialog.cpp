@@ -270,13 +270,7 @@ void SPaperZDExtractFlipbookFromTextureDialog::Construct(const FArguments& InArg
     DialogSettings->Naming.AnimationSequenceNamingTemplate = "ASQ_" + TextureName;
     DialogSettings->Naming.AnimationSourceNamingTemplate = "AS_" + TextureName;
     DialogSettings->Naming.AnimationBlueprintNamingTemplate = "ABP_" + TextureName;
-    DialogSettings->Animation.AnimationSource = nullptr;
-    DialogSettings->Animation.bCreateAnimationBlueprint = false;
-    DialogSettings->Animation.bCreateAnimationSource = false;
-    DialogSettings->Animation.bCreateAnimationSequence = false;
-    DialogSettings->Animation.bCreateAnimationSkin = false;
-    DialogSettings->Coloring.ViewportTextureTint = FLinearColor::Gray;
-    DialogSettings->Coloring.BackgroundColor = FLinearColor(0.1f, 0.1f, 0.1f);
+
     InitializeFlipbookExtractSettings(DialogSettings->Flipbooks.Add_GetRef(FPaperZDExtractFlipbookSettings()));
 
     PreviewSelectedFlipbooks();
@@ -861,11 +855,6 @@ void SPaperZDExtractFlipbookFromTextureDialog::ExtractFlipbooks()
                     {
                         AnimSequenceSettings = DialogSettings->Animation.AnimationSequenceSettings[AnimationSequenceID];
                     }
-                    else
-                    {
-                        AnimSequenceSettings.Category = TEXT("Default");
-                        AnimSequenceSettings.AnimationSequenceNamingTemplate = TEXT("{0}");
-                    }
 
                     FString AnimationSequenceName = FlipbookSettings.Naming.AnimSequenceNamingTemplate;
                     AnimationSequenceName.ReplaceInline(TEXT("{0}"), *AnimSequenceSettings.AnimationSequenceNamingTemplate);
@@ -1079,16 +1068,6 @@ void SPaperZDExtractFlipbookFromTextureDialog::OnFinishedChangingProperties(cons
             }
         }
 
-        if (PropertyName == GET_MEMBER_NAME_CHECKED(FPaperZDExtractFlipbooksAnimationSettings, AnimationSequenceSettings))
-        {
-            if (PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayAdd)
-            {
-                FPaperZDExtractFlipbooksAnimationSequenceSettings& AnimationSequenceSettings = DialogSettings->Animation.AnimationSequenceSettings.Last();
-                AnimationSequenceSettings.Category = TEXT("Default");
-                AnimationSequenceSettings.AnimationSequenceNamingTemplate = TEXT("{0}");
-            }
-        }
-
         if (PropertyName == GET_MEMBER_NAME_CHECKED(FPaperZDExtractFlipbooksAnimationSettings, AnimationSkinSettings))
         {
             if (PropertyChangedEvent.ChangeType == EPropertyChangeType::ArrayAdd)
@@ -1103,31 +1082,8 @@ void SPaperZDExtractFlipbookFromTextureDialog::InitializeFlipbookExtractSettings
 {
     FlipbookSettings.Coloring.OutlineColor = FLinearColor(FMath::FRand(), FMath::FRand(), FMath::FRand());
 
-    FlipbookSettings.Naming.FlipbookNamingTemplate = "{0}_{1}";
-    FlipbookSettings.Naming.FlipbookNamingStartIndex = 0;
-    FlipbookSettings.Naming.SpriteNamingTemplate = "{0}_{1}";
-    FlipbookSettings.Naming.SpriteNamingStartIndex = 0;
-    FlipbookSettings.Naming.AnimSequenceNamingTemplate = "{0}_{1}";
-
-    FlipbookSettings.Flipbook.FramesPerSecond = 15.0f;
-
-    FlipbookSettings.Sprite.PivotMode = ESpritePivotMode::Center_Center;
-    FlipbookSettings.Sprite.CustomPivotModeReference = ESpritePivotMode::Center_Center;
-    FlipbookSettings.Sprite.CustomPivotPoint = FVector2D(0.0f);
-
-    FlipbookSettings.Animation.AnimationSequenceID = -1;
-    FlipbookSettings.Animation.AnimationDirectionIndex = -1;
-    FlipbookSettings.Animation.AnimationSkinID = -1;
-    FlipbookSettings.Animation.AnimationSkinSequenceID = -1;
-
     FlipbookSettings.Extraction.CellWidth = SourceTexture->GetImportedSize().X;
     FlipbookSettings.Extraction.CellHeight = SourceTexture->GetImportedSize().Y;
-    FlipbookSettings.Extraction.NumCellsX = 0;
-    FlipbookSettings.Extraction.NumCellsY = 0;
-    FlipbookSettings.Extraction.MarginX = 0;
-    FlipbookSettings.Extraction.MarginY = 0;
-    FlipbookSettings.Extraction.SpacingX = 0;
-    FlipbookSettings.Extraction.SpacingY = 0;
 }
 
 void SPaperZDExtractFlipbookFromTextureDialog::InitializeAnimationSkinSettings(FPaperZDExtractFlipbooksAnimationSkinSettings& SkinSettings)
