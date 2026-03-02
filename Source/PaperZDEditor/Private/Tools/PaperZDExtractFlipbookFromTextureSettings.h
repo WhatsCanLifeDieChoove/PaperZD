@@ -68,14 +68,24 @@ struct FPaperZDExtractFlipbookFlipbookSettings
     GENERATED_BODY()
 
 public:
+    // If a flipbook should be generated (if not, only the sprites will get extracted)
+    UPROPERTY(Category = Flipbook, EditAnywhere)
+    bool bGenerateFlipbook;
+
     // The flipbook speed
     UPROPERTY(Category = Flipbook, EditAnywhere)
     float FramesPerSecond;
 
+    // The material for the flipbook
+    UPROPERTY(Category = Flipbook, EditAnywhere)
+    UMaterialInterface* Material;
+
 public:
 	//ctor
     FPaperZDExtractFlipbookFlipbookSettings()
-	: FramesPerSecond(15.0f)
+	: bGenerateFlipbook(true)
+    , FramesPerSecond(15.0f)
+    , Material(nullptr)
 	{}
 };
 
@@ -97,12 +107,22 @@ public:
     UPROPERTY(Category = Sprite, EditAnywhere)
     FVector2D CustomPivotPoint;
 
+    // The collision configuration
+    UPROPERTY(Category = Sprite, EditAnywhere)
+    TEnumAsByte<ESpriteCollisionMode::Type> Collision;
+
+    // The rendering type
+    UPROPERTY(Category = Sprite, EditAnywhere)
+    TEnumAsByte<ESpritePolygonMode::Type> RenderGeometryType;
+
 public:
 	//ctor
     FPaperZDExtractFlipbookSpriteSettings()
 	: PivotMode(ESpritePivotMode::Center_Center)
     , CustomPivotModeReference(ESpritePivotMode::Center_Center)
     , CustomPivotPoint(0.0f)
+    , Collision(ESpriteCollisionMode::Use3DPhysics)
+    , RenderGeometryType(ESpritePolygonMode::TightBoundingBox)
 	{}
 };
 

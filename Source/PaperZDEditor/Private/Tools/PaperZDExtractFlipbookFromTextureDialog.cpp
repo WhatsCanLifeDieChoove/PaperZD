@@ -33,15 +33,14 @@
 
 #include "Kismet2/KismetEditorUtilities.h"
 
+#include "Misc/FeedbackContext.h"
+
 #include "Util/PaperZDEditorSettings.h"
 
 #include "Widgets/Layout/SUniformGridPanel.h"
 #include "Widgets/Layout/SExpandableArea.h"
 #include "Widgets/Layout/SSeparator.h"
 #include "Widgets/Layout/SScrollBox.h"
-
-#include "Misc/FeedbackContext.h"
-
 
 #define LOCTEXT_NAMESPACE "PaperZDTools"
 
@@ -725,6 +724,25 @@ void SPaperZDExtractFlipbookFromTextureDialog::ExtractFlipbooks()
 
                 const FVector2D TargetPivotPoint = SPaperZDExtractFlipbookFromTextureHelper::GetResultPivotPoint(NewAsset, FlipbookSettings);
                 NewAsset->SetPivotMode(FlipbookSettings.Sprite.PivotMode, TargetPivotPoint);
+                
+                if (FStructProperty* StructProp = FindFProperty<FStructProperty>(UPaperSprite::StaticClass(), TEXT("RenderGeometry")))
+                {
+                    void* StructPtr = StructProp->ContainerPtrToValuePtr<void>(NewAsset);
+
+                    if (FByteProperty* ByteProp = CastField<FByteProperty>(StructProp->Struct->FindPropertyByName(TEXT("GeometryType"))))
+                    {
+                        ByteProp->SetIntPropertyValue(ByteProp->ContainerPtrToValuePtr<void>(StructPtr),(int64)FlipbookSettings.Sprite.RenderGeometryType);
+                    }
+                }
+
+                if (FProperty* Property = FindFProperty<FProperty>(UPaperSprite::StaticClass(), TEXT("SpriteCollisionDomain")))
+                {
+                    void* ValuePtr = Property->ContainerPtrToValuePtr<void>(NewAsset);
+                    if (FByteProperty* ByteProp = CastField<FByteProperty>(Property))
+                    {
+                        ByteProp->SetIntPropertyValue(ValuePtr, (int64)FlipbookSettings.Sprite.Collision);
+                    }
+                }
 
                 FAssetRegistryModule::AssetCreated(NewAsset);
                 NewAsset->MarkPackageDirty();
@@ -741,6 +759,7 @@ void SPaperZDExtractFlipbookFromTextureDialog::ExtractFlipbooks()
             }
         }
 
+        bCancelled |= !FlipbookSettings.Flipbook.bGenerateFlipbook;
         if (!bCancelled)
         {
             Feedback.EnterProgressFrame(1, NSLOCTEXT("TiledIntegration", "TiledIntegration_ExtractSpritesFromTexture", "Generating Flipbook"));
@@ -777,6 +796,11 @@ void SPaperZDExtractFlipbookFromTextureDialog::ExtractFlipbooks()
                         {
                             *FramesPerSecondPtr = FlipbookSettings.Flipbook.FramesPerSecond;
                         }
+                    }
+
+                    if (FObjectProperty* Property = FindFProperty<FObjectProperty>(UPaperFlipbook::StaticClass(), TEXT("DefaultMaterial")))
+                    {
+                        Property->SetObjectPropertyValue_InContainer(NewAsset, FlipbookSettings.Flipbook.Material);
                     }
 
                     ExtractedFlipbook.Flipbook = NewAsset;
@@ -1116,6 +1140,8 @@ void SPaperZDExtractFlipbookFromTextureDialog::InitializeFlipbookExtractSettings
 
     FlipbookSettings.Extraction.CellWidth = SourceTexture->GetImportedSize().X;
     FlipbookSettings.Extraction.CellHeight = SourceTexture->GetImportedSize().Y;
+
+    FlipbookSettings.Flipbook.Material = LoadObject<UMaterialInterface>(nullptr, TEXT("/Paper2D/MaskedUnlitSpriteMaterial"));
 }
 
 void SPaperZDExtractFlipbookFromTextureDialog::InitializeAnimationSkinSettings(FPaperZDExtractFlipbooksAnimationSkinSettings& SkinSettings)
